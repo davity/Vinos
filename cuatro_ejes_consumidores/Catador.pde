@@ -1,9 +1,9 @@
 
 
-class Consumidor {
+class Catador {
   Vino[] vinos;
 
-  Consumidor(Vino[] vinos_) {
+  Catador(Vino[] vinos_) {
     vinos = vinos_;
   }
 
