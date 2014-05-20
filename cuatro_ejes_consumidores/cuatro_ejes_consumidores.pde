@@ -7,8 +7,8 @@ Catador[] catadores;
 // Rotaciones para cada eje
 float tono_r = 150;
 float olor_r = 120;
-float persistencia_r = 60;
-float sabor_r = 30;
+float sabor_r = 60;
+float persistencia_r = 30;
 
 Table table;
 
@@ -28,7 +28,8 @@ void setup() {
   //    print("Catador " + str(i) + "\n");
   //    print(catadores[i].to_s());
   //  }
-  
+    
+  // Vectores unitarios para todas las direcciones
   tono_p = new PVector(1,0);
   tono_n = new PVector(1,0);
   olor_p = new PVector(1,0);
@@ -42,17 +43,43 @@ void setup() {
 }
 
 void draw() {
+  noSmooth();
+  strokeWeight(1);
   translate(width / 2, height / 2);
   scale(1,-1);
-  //smooth();
   ejes();
-
+  leyenda();
   
+  smooth(8);
+  strokeWeight(5);
+  posicion = new PVector(0,0);
   
+  posicion = new PVector(posicion.x + 4 * escala * tono_p.x, posicion.y + 4 * escala * tono_p.y);
+  stroke(0);
+  point(posicion.x, posicion.y);
+  
+  posicion = new PVector(posicion.x + 4 * escala * olor_p.x, posicion.y + 4 * escala * olor_p.y);
+  stroke(32);
+  point(posicion.x, posicion.y);
+  
+  posicion = new PVector(posicion.x + 3 * escala * sabor_p.x, posicion.y + 3 * escala * sabor_p.y);
+  stroke(64);
+  point(posicion.x, posicion.y);
+  
+  posicion = new PVector(posicion.x + 1 * escala * persistencia_p.x, posicion.y + 1 * escala * persistencia_p.y);
+  stroke(96);
+  point(posicion.x, posicion.y);
+  
+  File file = new File("test.png");
+  if (!file.exists())
+  {
+    save("test.png");
+  } 
   
 }
 
 void direcciones() {
+  // Rotamos los vectores unitarios para que tomen la dirección del eje correspondiente
   tono_p.rotate(radians(tono_r));
   tono_n.rotate(radians(-tono_r));
   olor_p.rotate(radians(olor_r));
@@ -84,7 +111,27 @@ void ejes() {
   stroke(color(0, 0, 255));
   line(0,0, persistencia_p.x * escala * max, persistencia_p.y * escala * max);
   line(0,0, persistencia_n.x * escala * min, persistencia_n.y * escala * min);
+  
   stroke(0);
+}
+
+void leyenda() {
+  pushMatrix();
+  scale(1,-1);
+  translate(- width / 2 + 20, - height / 2 + 20);
+  
+  fill(255,0,0);
+  text("color", 20, 20);
+  
+  fill(color(255, 255, 0));
+  text("olor", 20, 40);
+  
+  fill(color(0, 255, 0));
+  text("sabor", 20, 60);
+  
+  fill(color(0, 0, 255));
+  text("persistencia", 20, 80);
+  popMatrix();
 }
 
 void loadData() {
