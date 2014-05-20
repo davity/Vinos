@@ -1,7 +1,8 @@
 
 
 class Catador {
-  Vino[] vinos;
+  // Puntuaciones para 8 vinos
+  Vino[] vinos; 
 
   Catador(Vino[] vinos_) {
     vinos = vinos_;
