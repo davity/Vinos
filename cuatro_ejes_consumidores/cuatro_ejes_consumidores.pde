@@ -1,12 +1,14 @@
 float escala = 30f;
+float max = 10f;
+float min = 10f;
 
 Catador[] catadores;
 
 // Rotaciones para cada eje
-float tono_r = 22.5;
-float olor_r = 67.5;
-float persistencia_r = 112.5;
-float sabor_r = 157.5;
+float tono_r = 150;
+float olor_r = 120;
+float persistencia_r = 60;
+float sabor_r = 30;
 
 Table table;
 
@@ -35,76 +37,54 @@ void setup() {
   sabor_n = new PVector(1,0);
   persistencia_p = new PVector(1,0);
   persistencia_n = new PVector(1,0);
+  
+  direcciones();
 }
 
 void draw() {
+  translate(width / 2, height / 2);
+  scale(1,-1);
   //smooth();
   ejes();
 
-  translate(width / 2, height / 2);
-  rotate(radians(-90));
+  
+  
+  
+}
 
-  pushStyle();
-  stroke(0, 0, 0);
-  strokeWeight(5);
-  posicion = new PVector(12, 14);
-  posicion.normalize();
-  point(posicion.x * 5 * escala, posicion.y*3*escala);
-  popStyle();
+void direcciones() {
+  tono_p.rotate(radians(tono_r));
+  tono_n.rotate(radians(-tono_r));
+  olor_p.rotate(radians(olor_r));
+  olor_n.rotate(radians(-olor_r));
+  sabor_p.rotate(radians(sabor_r));
+  sabor_n.rotate(radians(-sabor_r));
+  persistencia_p.rotate(radians(persistencia_r));
+  persistencia_n.rotate(radians(-persistencia_r));
 }
 
 void ejes() {
-  pushStyle();
-  strokeWeight(1);
   noSmooth();
-  
-  // Ejes X-Y
-  pushMatrix();
-  translate( width / 2, height / 2);
   stroke(0);
-  line(-300, 0, 300, 0);
-  line(0, -300, 0, 300);
-  rotate(radians(-180));
-
-  // Ejes tono
-  pushMatrix();
-  stroke(color(255, 0, 0));  
-  rotate(radians(tono_r));
-  line(0, 0, 300, 0);
-  rotate(radians(-2 * tono_r));
-  line(0, 0, 300, 0);
-  popMatrix();
-
-  // Ejes olor
-  pushMatrix();
+  line(- escala * max, 0, escala * max, 0);
+  line(0, - escala * min, 0, escala * min);
+  
+  stroke(255,0,0);
+  line(0,0, tono_p.x * escala * max, tono_p.y * escala * max);
+  line(0,0, tono_n.x * escala * min, tono_n.y * escala * min);
+  
   stroke(color(255, 255, 0));
-  rotate(radians(olor_r));
-  line(0, 0, 300, 0);
-  rotate(radians(-2 * olor_r));
-  line(0, 0, 300, 0);
-  popMatrix();
-
-  // Ejes sabor
-  pushMatrix();
+  line(0,0, olor_p.x * escala * max, olor_p.y * escala * max);
+  line(0,0, olor_n.x * escala * min, olor_n.y * escala * min);
+  
   stroke(color(0, 255, 0));
-  rotate(radians(sabor_r));
-  line(0, 0, 300, 0);
-  rotate(radians(-2 * sabor_r));
-  line(0, 0, 300, 0);
-  popMatrix();
-
-  // Ejes persistencia
-  pushMatrix();
-  stroke(color(0, 255, 255));
-  rotate(radians(persistencia_r));
-  line(0, 0, 300, 0);
-  rotate(radians(-2 * persistencia_r));
-  line(0, 0, 300, 0);
-  popMatrix();
-
-  popMatrix();
-  smooth(8);
-  popStyle();
+  line(0,0, sabor_p.x * escala * max, sabor_p.y * escala * max);
+  line(0,0, sabor_n.x * escala * min, sabor_n.y * escala * min);
+  
+  stroke(color(0, 0, 255));
+  line(0,0, persistencia_p.x * escala * max, persistencia_p.y * escala * max);
+  line(0,0, persistencia_n.x * escala * min, persistencia_n.y * escala * min);
+  stroke(0);
 }
 
 void loadData() {
