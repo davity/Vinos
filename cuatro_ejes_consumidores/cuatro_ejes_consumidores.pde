@@ -13,10 +13,14 @@ PVector posicion;
 PVector tono_p, tono_n;
 PVector aroma_p, aroma_n;
 PVector sabor_p, sabor_n;
-PVector persistencia_p, persistencia_n; 
+PVector persistencia_p, persistencia_n;
+
+int maxhue;
 
 void setup() {
   size(800, 800);
+  background(200);
+  maxhue = 10;
 
   loadData();
 
@@ -29,17 +33,18 @@ void setup() {
   scale(1, -1);
   ejes();
   leyenda();
+  posicion = new PVector(0,0);
+
+  colorMode(HSB, maxhue, 4  * catadores.length, 4 * catadores.length, 3);
+  espectro();
 }
 
 void draw() {
-  //frameRate(1);
-  noSmooth();
-  strokeWeight(1);
   translate(width / 2, height / 2);
   scale(1, -1);
-  
 
-  posicion = new PVector(0, 0);
+  posicion.x = 0;
+  posicion.y = 0;
 
   // Puntos para el primer vino
   //for(Catador catador : catadores) {
@@ -49,49 +54,47 @@ void draw() {
     posicion.x = 0;
     posicion.y = 0;
 
-    // Reiniciamos el color
-    int opacidad = 0; 
-
     Vino vino = catador.vinos[0];
+    int hue = 1;
 
     // Color
     float t = vino.tono - vino.global;
     if (t > 0) {
-      pintarPunto(tono_p, t, opacidad);
+      pintarPunto(tono_p, t, hue);
     } else if (t < 0) {
-      pintarPunto(tono_n, -t, opacidad);
+      pintarPunto(tono_n, -t, hue);
     }
-    opacidad += 64;
+    hue += 2;
 
     // Aroma
     float a = vino.aroma - vino.global;
     if (a > 0) {
-      pintarPunto(aroma_p, a, opacidad);
+      pintarPunto(aroma_p, a, hue);
     } else if (a < 0) {
-      pintarPunto(aroma_n, -a, opacidad);
+      pintarPunto(aroma_n, -a, hue);
     }
-    opacidad += 64;
+    hue += 2;
 
     // Sabor
     float s = vino.sabor - vino.global;
     if (s > 0) {
-      pintarPunto(sabor_p, s, opacidad);
+      pintarPunto(sabor_p, s, hue+1);
     } else if (s < 0) {
-      pintarPunto(sabor_n, -s, opacidad);
+      pintarPunto(sabor_n, -s, hue+1);
     }
-    opacidad += 64;
+    hue += 2;
 
     // Persistencia
     float p = vino.persistencia - vino.global;
     if (p > 0) {
-      pintarPunto(persistencia_p, p, opacidad);
+      pintarPunto(persistencia_p, p, hue+1);
     } else if (p < 0) {
-      pintarPunto(persistencia_n, -p, opacidad);
+      pintarPunto(persistencia_n, -p, hue+1);
     }
-    opacidad += 64;
+    hue += 2;
   }
 
-  i++; 
+  i++;
 
   //  File file = new File("test.png");
   //  if (!file.exists())
@@ -100,15 +103,15 @@ void draw() {
   //  }
 }
 
-void pintarPunto(PVector direccion, float valor, int opacidad) {
+void pintarPunto(PVector direccion, float valor, int huuee) {
   pushStyle();
   smooth(8);
-  strokeWeight(5);
+  strokeWeight(0);
   posicion.x = posicion.x + valor * escala * direccion.x;
   posicion.y = posicion.y + valor * escala * direccion.y;
-  stroke(opacidad);
-  point(posicion.x, posicion.y);
-  println("Punto" + posicion.x + " " + posicion.y);
+  stroke(0, 0, 0, 0);
+  fill(huuee, 4*catadores.length, 4*catadores.length, 3);
+  ellipse(posicion.x, posicion.y, 6, 6);
   popStyle();
 }
 
@@ -194,7 +197,7 @@ void loadData() {
   Vino[] vinos;
 
   for (TableRow row : table.rows ()) {
-    vinos = new Vino[8];  
+    vinos = new Vino[8];
     tono_p = aroma = sabor = persistencia = global = 0;
     for (int i = 0; i < 8; i++) {
       tono_p = row.getInt("color" + str(i));
@@ -210,3 +213,16 @@ void loadData() {
   }
 }
 
+void espectro() {
+  pushMatrix();
+  scale(1, -1);
+  translate(- width / 2 + 10, - height / 2 + 10);
+
+  int posx = 0;
+  for (int i = 0; i < maxhue; ++i) {
+    fill(i, 4*catadores.length, 4*catadores.length);
+    rect(posx, 0, 10, 10);
+    posx += 12;
+  }
+  popMatrix();
+}
